@@ -852,6 +852,8 @@ h3{font-size:var(--fs-h3)}
     tel.value=o;
   });
 
+  /* Guarda as UTMs da visita para enviar junto com o lead */
+  try{ var _q=new URLSearchParams(location.search); ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){ var v=_q.get(k); if(v) sessionStorage.setItem('p3_'+k,v); }); }catch(_){}
   /* Validação e envio */
   var form=document.getElementById('leadForm');
   function valid(el){
@@ -875,7 +877,16 @@ h3{font-size:var(--fs-h3)}
     cw.classList.toggle('invalid',!lg.checked); if(!lg.checked&&!first) first=lg;
     if(first){ first.focus(); return; }
     var data=Object.fromEntries(new FormData(form).entries());
-    /* Integração: envie "data" para o CRM, webhook ou ferramenta de automação aqui. */
+    /* Integração: envia o lead para a planilha "P3 Talent - Leads LP" (Google Apps Script) */
+    try{
+      var LEADS_ENDPOINT='https://script.google.com/macros/s/AKfycby8hFWqw7Rs-dYIeQ-qAdm1zBxXl0RMq--yHgIldXG9X2Gglw2di4ES3ug8X8lDP1DR/exec';
+      ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){
+        var v=null; try{ v=new URLSearchParams(location.search).get(k)||sessionStorage.getItem('p3_'+k); }catch(_){}
+        if(v) data[k]=v;
+      });
+      data.pagina=location.origin+location.pathname;
+      fetch(LEADS_ENDPOINT,{method:'POST',mode:'no-cors',keepalive:true,body:new URLSearchParams(data)}).catch(function(){});
+    }catch(_){}
     window.dataLayer=window.dataLayer||[]; window.dataLayer.push({event:'lead_p3talent',servico:data.servico});
     form.hidden=true; document.getElementById('success').hidden=false;
   });
