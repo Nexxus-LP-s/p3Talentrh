@@ -7,6 +7,15 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 </script>
+<!-- Meta Pixel - P3 Talent -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','1472636538108163');
+fbq('track','PageView');
+</script>
+<!-- Google Ads - P3 Talent (AW-18504442708) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18504442708"></script>
+<script>gtag('config','AW-18504442708');</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>P3 Talent para Empresas</title>
@@ -888,6 +897,9 @@ h3{font-size:var(--fs-h3)}
       fetch(LEADS_ENDPOINT,{method:'POST',mode:'no-cors',keepalive:true,body:new URLSearchParams(data)}).catch(function(){});
     }catch(_){}
     window.dataLayer=window.dataLayer||[]; window.dataLayer.push({event:'lead_p3talent',servico:data.servico});
+    /* Conversões: Meta Pixel (Lead) e Google Ads (LP P3 - Envio de formulário) */
+    try{ if(window.fbq) fbq('track','Lead',{content_name:data.servico}); }catch(_){}
+    try{ if(window.gtag) gtag('event','conversion',{send_to:'AW-18504442708/bLKiCLmen74dENTGzfdE'}); }catch(_){}
     form.hidden=true; document.getElementById('success').hidden=false;
   });
   /* Revelação suave ao rolar */
